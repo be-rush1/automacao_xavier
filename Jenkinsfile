@@ -6,7 +6,7 @@ pipeline {
  stages {
     stage('Baixa dados do Xavier') {
       steps {           
-        sh 'pip install gdown'
+        sh 'pipx install gdown'
       }
     }
     stage('Deszipa dados Xavier'){
