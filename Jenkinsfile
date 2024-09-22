@@ -11,7 +11,7 @@ pipeline {
     }
    stage('Baixa dados xavier'){
      steps{
-       sh 'python3 baixa_xavier.py'
+       sh 'cd /var/jenkins_home/.local/pipx/venvs/gdown && python3 baixa_xavier.py'
      }
    }
     stage('Deszipa dados Xavier'){
