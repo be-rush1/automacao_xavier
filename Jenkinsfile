@@ -6,7 +6,10 @@ pipeline {
  stages {
     stage('Instala gdown ambiente virtual') {
       steps {           
-        sh 'pipx install gdown'
+        sh 'python -m venv .venv
+            . .venv/bin/activate
+            pip install -r requirements.txt
+            pytest -v'
       }
     }
    stage('Baixa dados xavier'){
