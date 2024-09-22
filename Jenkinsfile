@@ -10,6 +10,7 @@ pipeline {
             source ./venv/bin/activate
             pip install gdown
             python3 baixa_xavier.py
+            unzip pr_Tmax_Tmin_NetCDF_Files.zip
             '''
       }
     }
