@@ -3,7 +3,7 @@ import xarray as xr
 import geopandas
 import sys
 from shapely.geometry import mapping
-path = sys.argv[1]
+path = "dados_extraidos/" + sys.argv[1]
 data = xr.open_dataset(path)
 data.rio.set_spatial_dims(x_dim="latitude", y_dim="longitude", inplace=True)
 data.rio.write_crs("epsg:4326", inplace=True)
