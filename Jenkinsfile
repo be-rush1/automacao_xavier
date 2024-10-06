@@ -33,6 +33,7 @@ pipeline {
            steps{
                sh '''
                      mv BR_região_sudeste_2022.shp BR_região_sudeste_2022.shx dados_extraidos
+                     rm dados_extraidos/Tmax_19610101_19801231_BR-DWGD_UFES_UTEXAS_v_3.2.3.nc
                      for x in `ls dados_extraidos | grep .nc`; do
                      python3 corta_dados.py $x
                      done
