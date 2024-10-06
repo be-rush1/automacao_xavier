@@ -9,7 +9,6 @@ pipeline {
                 if [ ! -d "venv" ]; then
                     python3 -m venv venv
                     ./venv/bin/pip install gdown
-                    mkdir data/extracted_data
                 fi
                 '''
             }
