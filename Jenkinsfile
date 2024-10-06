@@ -40,11 +40,4 @@ pipeline {
            }
        }
     }
-
-    post {
-        always {
-            // Clean up if necessary
-            sh 'deactivate || true'
-        }
-    }
 }
