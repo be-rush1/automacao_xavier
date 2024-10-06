@@ -31,7 +31,7 @@ pipeline {
         }
        stage('Corta Dados'){
            steps{
-               sh '''for x in `ls /dados_extraidos | grep .nc`; do
+               sh '''for x in `ls dados_extraidos | grep .nc`; do
                      python3 corta_dados.py $x
                      done
                   '''
