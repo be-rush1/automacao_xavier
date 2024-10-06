@@ -26,12 +26,12 @@ pipeline {
         }
         stage('Deszipa arquivo'){
             steps{
-                sh 'unzip -o data/pr_Tmax_Tmin_NetCDF_Files.zip -d data/dados_extraidos/'
+                sh 'unzip -o pr_Tmax_Tmin_NetCDF_Files.zip -d dados_extraidos/'
             }
         }
        stage('Corta Dados'){
            steps{
-               sh '''for x in `ls data/dados_extraidos`; do
+               sh '''for x in `ls dados_extraidos`; do
                      python3 corta_dados.py $x
                      done
                   '''
