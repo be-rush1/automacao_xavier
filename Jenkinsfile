@@ -37,7 +37,6 @@ pipeline {
        stage('Corta Dados'){
            steps{
                sh '''
-                     mv BR_região_sudeste_2022.shp BR_região_sudeste_2022.shx dados_extraidos
                      for x in `ls | grep .nc`; do
                      python3 corta_dados.py $x
                      done
