@@ -19,7 +19,7 @@ pipeline {
                 // Ativar o ambiente virtual e rodar o script Python que usa o gdown
                 sh '''
                    . ./venv/bin/activate
-                   #python3 baixa_xavier.py
+                   python3 baixa_xavier.py
                    ls
                    '''
             }
