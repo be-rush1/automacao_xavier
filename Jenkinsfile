@@ -18,14 +18,14 @@ pipeline {
             steps {
                 // Ativar o ambiente virtual e rodar o script Python que usa o gdown
                 sh '''
-                    pwd
-                    ls
+                . ./venv/bin/activate
+                python3 baixa_xavier.py
                    '''
             }
         }
         stage('Deszipa arquivo'){
             steps{
-                sh 'pwd'
+                sh 'unzip -o pr_Tmax_Tmin_NetCDF_Files.zip -d dados_extraidos/'
             }
         }
        stage('Corta Dados'){
