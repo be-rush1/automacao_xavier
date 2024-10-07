@@ -1,7 +1,7 @@
 import numpy as np
 
 # Carrega o arquivo .npz
-data = np.load('seu_arquivo.npz')
+data = np.load('pr.npz')
 
 # Exibe as chaves (nomes dos arrays contidos no arquivo)
 print(data.files)
