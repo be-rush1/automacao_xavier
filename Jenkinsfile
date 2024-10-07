@@ -30,6 +30,7 @@ pipeline {
                    #unzip -o pr_Tmax_Tmin_NetCDF_Files.zip 'pr_*' -d dados_extraidos/
                    #rm pr_Tmax_Tmin_NetCDF_Files.zip
                    python3 descomp.py pr.npz
+                   python3 converte.py 
                    ls
                    '''
             }
@@ -37,9 +38,7 @@ pipeline {
        stage('Corta Dados'){
            steps{
                sh '''
-                     for x in `ls | grep .nc`; do
-                     python3 corta_dados.py $x
-                     done
+                     python3 corta_dados.py data.nc
                   '''
            }
        }
