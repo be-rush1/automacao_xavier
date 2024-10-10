@@ -29,12 +29,19 @@ pipeline {
                 sh '''
                    #unzip -o pr_Tmax_Tmin_NetCDF_Files.zip 'pr_*' -d dados_extraidos/
                    #rm pr_Tmax_Tmin_NetCDF_Files.zip
-                   #python3 descomp.py pr.npz
-                   #python3 converte.py 
                    ls
                    '''
             }
         }
+       stage('Faz Média Mensal dos Dados'){
+           steps{
+               sh '''
+                  for $x in `ls dados_extraidos` do
+                    cdo monmean $x
+                  done
+                  '''
+           }
+       }
        stage('Corta Dados'){
            steps{
                sh '''
