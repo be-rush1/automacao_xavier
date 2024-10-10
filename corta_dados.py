@@ -8,7 +8,6 @@ path = sys.argv[1]
 data = xr.open_dataset(path)
 data.rio.set_spatial_dims(x_dim="latitude", y_dim="longitude", inplace=True)
 data.rio.write_crs("epsg:4326", inplace=True)
-print(data.variables)
 data = data.drop_vars("time_bnds", errors="ignore")
 sudeste = geopandas.read_file('BR_região_sudeste_2022.shp', crs="epsg:4326")
 clipped = data.rio.clip(sudeste.geometry.apply(mapping), sudeste.crs, drop=True)
