@@ -36,7 +36,7 @@ pipeline {
        stage('Faz Média Mensal dos Dados'){
            steps{
                sh '''
-                  for $x in `ls dados_extraidos` do
+                  for x in `ls dados_extraidos`; do
                     cdo monmean $x
                   done
                   '''
