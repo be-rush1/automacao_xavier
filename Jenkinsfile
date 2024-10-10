@@ -47,9 +47,11 @@ pipeline {
        stage('Corta Dados'){
            steps{
                sh '''
-                     for x in `ls | grep media`; do
-                        python3 corta_dados.py $x
-                      done
+                     pwd
+                     ls
+                     #for x in `ls | grep media`; do
+                     #   python3 corta_dados.py $x
+                     # done
                   '''
            }
        }
