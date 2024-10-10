@@ -37,7 +37,8 @@ pipeline {
            steps{
                sh '''
                   for x in `ls dados_extraidos | grep .nc`; do
-                    cdo monmean $x
+                    touch media_$x
+                    cdo monmean $x media_$x
                   done
                   '''
            }
