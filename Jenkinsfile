@@ -19,7 +19,7 @@ pipeline {
                 sh '''
                    . ./venv/bin/activate
                    python3 baixa_xavier.py
-                   
+                   ls
                    '''
             }
         }
