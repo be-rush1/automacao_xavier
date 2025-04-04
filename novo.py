@@ -20,42 +20,55 @@ pr = dataset_combinado['pr']
 # Definir o período de referência (1991-2020)
 precip_ref = pr.sel(time=slice("19910101", "20201231"))
 
-# Calcular a média climatológica mensal e o desvio padrão
+# Calcular a média climatológica mensal
 media_climatologica = precip_ref.groupby('time.month').mean(dim='time', skipna=True)
-std_climatologica = precip_ref.groupby('time.month').std(dim='time', skipna=True)
 
-# Função para calcular a anomalia normalizada (Z-score)
-def calcular_anomalia_normalizada(dados, media_climatologica, std_climatologica):
+# Função para calcular a anomalia normalizada
+def calcular_anomalia(dados, media_climatologica):
+    # Calcular anomalias brutas
     anomalia = dados.groupby('time.month') - media_climatologica
-    anomalia_normalizada = anomalia.groupby('time.month') / std_climatologica
-    return anomalia_normalizada
+
+    # Encontrar valores mínimo e máximo globai
+
+    return anomalia
 
 # Calcular anomalias normalizadas
-anomalia_norm_1961_1980 = calcular_anomalia_normalizada(
-    pr.sel(time=slice("19610101", "19801231")), media_climatologica, std_climatologica
-)
-anomalia_norm_1981_2000 = calcular_anomalia_normalizada(
-    pr.sel(time=slice("19810101", "20001231")), media_climatologica, std_climatologica
-)
-anomalia_norm_2001_2024 = calcular_anomalia_normalizada(
-    pr.sel(time=slice("20010101", "20241231")), media_climatologica, std_climatologica
+anomalia_1961_1980 = calcular_anomalia(
+    pr.sel(time=slice("19610101", "19801231")), media_climatologica)
+anomalia_1981_2000 = calcular_anomalia(
+    pr.sel(time=slice("19810101", "20001231")), media_climatologica)
+anomalia_2001_2024 = calcular_anomalia(
+    pr.sel(time=slice("20010101", "20241231")), media_climatologica
 )
 
 # Concatenar as anomalias
-anomalia_norm_combinada = xr.concat(
-    [anomalia_norm_1961_1980, anomalia_norm_1981_2000, anomalia_norm_2001_2024], dim='time'
+anomalia_combinada = xr.concat(
+    [anomalia_1961_1980, anomalia_1981_2000, anomalia_2001_2024], dim='time'
 )
+
+min_anomalia = np.nanmin(anomalia_combinada.values)
+max_anomalia = np.nanmax(anomalia_combinada.values)
+anomalia_norm_combinada = 2 * ((anomalia_combinada - min_anomalia) / (max_anomalia - min_anomalia)) - 1
+
+print("Valor mínimo normalizado:", np.nanmin(anomalia_norm_combinada.values))
+print("Valor máximo normalizado:", np.nanmax(anomalia_norm_combinada.values))
+
 
 # Salvar todas as anomalias normalizadas (1961-2024)
 anomalia_norm_combinada.to_netcdf("/Users/elizabetenunes/Desktop/anomalias_normalizadas_1961_2024.nc")
 print("Arquivo salvo: anomalias_normalizadas_1961_2024.nc")
 
 # Selecionar a anomalia de 2020 (média anual)
-anomalia_norm_2020 = anomalia_norm_combinada.sel(time=slice("20200101", "20201231")).mean(dim='time')
+anomalia_norm_2020 = anomalia_norm_combinada.sel(time=slice("20200101", "20200331")).mean(dim='time')
 
 # Salvar a anomalia normalizada de 2020
 anomalia_norm_2020.to_netcdf("/Users/elizabetenunes/Desktop/anomalia_normalizada_2020.nc")
 print("Arquivo salvo: anomalia_normalizada_2020.nc")
+
+print("\nVerificação dos dados:")
+print(f"Valor mínimo: {np.nanmin(anomalia_norm_2020.values):.4f}")
+print(f"Valor máximo: {np.nanmax(anomalia_norm_2020.values):.4f}")
+print(f"Média: {np.nanmean(anomalia_norm_2020.values):.4f}")
 
 # Carregar o shapefile da região Sudeste
 shapefile_path = "/Users/elizabetenunes/Desktop/BR_regiao_sudeste_2022/BR_região_sudeste_2022.shp"
@@ -74,7 +87,7 @@ anomalia_norm_2020.plot(
     ax=ax,
     cmap="coolwarm",
     transform=ccrs.PlateCarree(),
-    cbar_kwargs={"label": "Anomalia Normalizada (Z-score)"}
+    cbar_kwargs={"label": "Anomalia Normalizada"}
 )
 
 # Adicionar o shapefile da Região Sudeste
