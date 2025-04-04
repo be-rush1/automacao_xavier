@@ -23,12 +23,10 @@ precip_ref = pr.sel(time=slice("19910101", "20201231"))
 # Calcular a média climatológica mensal
 media_climatologica = precip_ref.groupby('time.month').mean(dim='time', skipna=True)
 
-# Função para calcular a anomalia normalizada
+# Função para calcular a anomalia
 def calcular_anomalia(dados, media_climatologica):
-    # Calcular anomalias brutas
     anomalia = dados.groupby('time.month') - media_climatologica
 
-    # Encontrar valores mínimo e máximo globai
 
     return anomalia
 
