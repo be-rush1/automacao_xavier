@@ -7,10 +7,15 @@ import cartopy.feature as cfeature
 import os
 
 # Abrir os arquivos NetCDF
+
+os.system("cdo detrend /Users/elizabetenunes/Desktop/dados_cortados_media_pr_20010101_20240320_BR-DWGD_UFES_UTEXAS_v_3.2.3.nc /Users/elizabetenunes/Desktop/dados_cortados_media_pr_20010101_20240320_BR-DWGD_UFES_UTEXAS_v_3.2.3_st.nc")
+os.system("cdo detrend /Users/elizabetenunes/Desktop/dados_cortados_media_pr_19810101_20001231_BR-DWGD_UFES_UTEXAS_v_3.2.3.nc /Users/elizabetenunes/Desktop/dados_cortados_media_pr_19810101_20001231_BR-DWGD_UFES_UTEXAS_v_3.2.3_st.nc")
+os.system("cdo detrend /Users/elizabetenunes/Desktop/dados_cortados_media_pr_19610101_19801231_BR-DWGD_UFES_UTEXAS_v_3.2.3.nc /Users/elizabetenunes/Desktop/dados_cortados_media_pr_19610101_19801231_BR-DWGD_UFES_UTEXAS_v_3.2.3_st.nc")
+
 arquivos = [
-    '/Users/elizabetenunes/Desktop/dados_cortados_media_pr_20010101_20240320_BR-DWGD_UFES_UTEXAS_v_3.2.3.nc',
-    '/Users/elizabetenunes/Desktop/dados_cortados_media_pr_19810101_20001231_BR-DWGD_UFES_UTEXAS_v_3.2.3.nc',
-    '/Users/elizabetenunes/Desktop/dados_cortados_media_pr_19610101_19801231_BR-DWGD_UFES_UTEXAS_v_3.2.3.nc'
+    '/Users/elizabetenunes/Desktop/dados_cortados_media_pr_20010101_20240320_BR-DWGD_UFES_UTEXAS_v_3.2.3_st.nc',
+    '/Users/elizabetenunes/Desktop/dados_cortados_media_pr_19810101_20001231_BR-DWGD_UFES_UTEXAS_v_3.2.3_st.nc',
+    '/Users/elizabetenunes/Desktop/dados_cortados_media_pr_19610101_19801231_BR-DWGD_UFES_UTEXAS_v_3.2.3_st.nc'
 ]
 
 dataset_combinado = xr.open_mfdataset(arquivos, combine='by_coords')
@@ -61,10 +66,10 @@ anomalia_1961_2024 = calcular_anomalia(
 #    [anomalia_1961_1980, anomalia_1981_2000, anomalia_2001_2024], dim='time'
 #)
 
-min_anomalia = anomalia_1961_2024.min()
-max_anomalia = anomalia_1961_2024.max()
+#min_anomalia = anomalia_1961_2024.min()
+#max_anomalia = anomalia_1961_2024.max()
 
-anomalia_norm = 2 * ((anomalia_1961_2024 - min_anomalia) / (max_anomalia - min_anomalia)) - 1
+#anomalia_norm = 2 * ((anomalia_1961_2024 - min_anomalia) / (max_anomalia - min_anomalia)) - 1
 
 
 #print("Valor máximo normalizado:", np.nanmax(anomalia_norm_combinada.values))
@@ -72,16 +77,16 @@ anomalia_norm = 2 * ((anomalia_1961_2024 - min_anomalia) / (max_anomalia - min_a
 
 # Salvar todas as anomalias normalizadas (1961-2024)
 
-anomalia_norm.to_netcdf("/Users/elizabetenunes/Desktop/anomalias_normalizadas_1961_2024.nc")
+anomalia_1961_2024.to_netcdf("/Users/elizabetenunes/Desktop/anomalias_1961_2024.nc")
 print("Arquivo salvo: anomalias_normalizadas_1961_2024.nc")
 
 print("Removendo Tendência da Série...")
 
-os.system("cdo detrend /Users/elizabetenunes/Desktop/anomalias_normalizadas_1961_2024.nc /Users/elizabetenunes/Desktop/anomalias_normalizadas_1961_2024_sem_tendencia.nc")
+
 
 
 # Selecionar a anomalia de 2020 (do verão)
-anomalia_norm_2020 = anomalia_norm.sel(time=slice("20200101", "20200331")).mean(dim='time')
+anomalia_2020 = anomalia_1961_2024.sel(time=slice("20200101", "20200331")).mean(dim='time')
 
 # Salvar a anomalia normalizada de 2020
 #anomalia_norm_2020.to_netcdf("/Users/elizabetenunes/Desktop/anomalia_normalizada_2020.nc")
@@ -105,7 +110,7 @@ ax.add_feature(cfeature.COASTLINE, linewidth=1)
 ax.set_extent([-55, -35, -25, -10])  # Limites aproximados da Região Sudeste
 
 # Plotar anomalia normalizada de 2020
-anomalia_norm_2020.plot(
+anomalia_2020.plot(
     ax=ax,
     cmap="coolwarm",
     transform=ccrs.PlateCarree(),
