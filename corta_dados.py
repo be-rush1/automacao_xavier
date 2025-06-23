@@ -1,3 +1,5 @@
+import os
+
 import rioxarray
 import xarray as xr
 import geopandas
@@ -7,13 +9,13 @@ import numpy as np
 
 path = sys.argv[1]
 data = xr.open_dataset(path)
-
+os.system("ls")
 # Atenção aqui: longitude e latitude no lugar certo
 data.rio.set_spatial_dims(x_dim="longitude", y_dim="latitude", inplace=True)
 data.rio.write_crs("EPSG:4326", inplace=True)
 data = data.drop_vars("time_bnds", errors="ignore")
 
-sudeste = geopandas.read_file("BR_região_sudeste_2022.shp")
+sudeste = geopandas.read_file("BR_região_sudeste_2022.shp")
 
 # Reprojeta shapefile se CRS diferente
 if sudeste.crs != data.rio.crs:
