@@ -1,3 +1,5 @@
+
+def exists = fileExists ''
 pipeline {
     agent any
     stages {
@@ -8,6 +10,7 @@ pipeline {
                 if [ ! -d "venv" ]; then
                     python3 -m venv venv
                     ./venv/bin/pip install gdown
+                    ./venv/bin/pip install rioxarray
                 fi
                 '''
             }
