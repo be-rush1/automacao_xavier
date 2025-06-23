@@ -50,5 +50,13 @@ pipeline {
                   '''
            }
        }
+       stage('Calcula Anomalia, Normaliza e Remove tendência')
+            steps{
+                sh '''
+
+                    python3 novo.py
+
+                '''
+            }
     }
 }
