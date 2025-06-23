@@ -50,7 +50,7 @@ pipeline {
                sh ''' 
                     . ./venv/bin/activate
                     for x in `ls | grep media`; do
-                         python3 corta_dados.py $x
+                         python3 corta_dados.py $x BR_região_sudeste_2022.shp
                     done
                   '''
            }
