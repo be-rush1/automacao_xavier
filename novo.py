@@ -13,12 +13,12 @@ caminhos_detrended = [
     caminho.replace(".nc", "_st.nc") for caminho in caminhos_originais
 ]
 
-# Remover tendência com CDO
+# Remover tendência com precisão de ponto flutuante
 for entrada, saida in zip(caminhos_originais, caminhos_detrended):
-    os.system(f"cdo detrend {entrada} {saida}")
+    os.system(f"cdo -b F64 detrend {entrada} {saida}")
 
-# Abrir os arquivos detrended como um único dataset
-ds = xr.open_mfdataset(caminhos_detrended, combine='by_coords')
+# Abrir os arquivos detrended (sem dask)
+ds = xr.open_mfdataset(caminhos_detrended, combine='by_coords', chunks={})
 
 # Selecionar a variável de precipitação
 pr = ds['pr']
