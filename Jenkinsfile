@@ -11,6 +11,7 @@ pipeline {
                 ./venv/bin/pip install gdown
                 ./venv/bin/pip install rioxarray
                 ./venv/bin/pip install geopandas
+                ./venv/bin/pip install netcdf4
                 '''
             }
         }
