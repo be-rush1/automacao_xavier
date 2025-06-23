@@ -5,29 +5,41 @@ import sys
 import os
 from shapely.geometry import mapping
 
+# Caminho do arquivo NetCDF recebido como argumento
 path = sys.argv[1]
+
+# Abre o dataset
 data = xr.open_dataset(path)
 
-# Define dimensões espaciais
+# Configura as dimensões espaciais
 data.rio.set_spatial_dims(x_dim="latitude", y_dim="longitude", inplace=True)
-data.rio.write_crs("epsg:4326", inplace=True)
 
-# Remove variáveis que podem dar erro
+# Define o CRS do NetCDF como WGS84 (EPSG:4326)
+data.rio.write_crs("EPSG:4326", inplace=True)
+
+# Remove a variável de tempo, se existir
 data = data.drop_vars("time_bnds", errors="ignore")
 
-# Lê shapefile e reprojeta
-sudeste = geopandas.read_file('BR_região_sudeste_2022.shp')
-sudeste = sudeste.to_crs("EPSG:4326")
+# Carrega o shapefile da região Sudeste
+sudeste = geopandas.read_file("BR_região_sudeste_2022.shp")
 
-# Corta com geometria
+# Verifica e define/reprojeta o CRS corretamente
+if sudeste.crs is None:
+    print("Shapefile sem CRS. Atribuindo EPSG:4326.")
+    sudeste = sudeste.set_crs("EPSG:4326")
+else:
+    sudeste = sudeste.to_crs("EPSG:4326")
+
+# Faz o recorte espacial usando a geometria do shapefile
 clipped = data.rio.clip(sudeste.geometry.apply(mapping), sudeste.crs, drop=True)
 
-# Verifica se há dados temporais
-if "time" not in clipped or clipped.time.size == 0:
-    print(f"Nenhum dado espacial/temporal presente após o corte em {path}.")
-    sys.exit(0)
+# Verifica se há dados após o recorte
+if clipped.time.size == 0:
+    print(f"Nenhum dado encontrado após o recorte para o arquivo {path}. Verifique se os dados e o shapefile se sobrepõem.")
+    sys.exit(1)
 
-# Salva o resultado
-output_name = "dados_cortados_" + os.path.basename(path)
-clipped.to_netcdf(output_name)
-print(f"Dados de {path} cortados com sucesso!")
+# Salva o novo NetCDF recortado
+output_path = f"dados_cortados_{os.path.basename(path)}"
+clipped.to_netcdf(output_path)
+
+print(f"Dados de {path} cortados com sucesso e salvos em {output_path}")
