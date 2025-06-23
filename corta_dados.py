@@ -4,7 +4,7 @@ import geopandas
 import sys
 import os
 from shapely.geometry import mapping
-
+os.system("ls")
 # Caminho para o arquivo NetCDF (passado via linha de comando)
 path = sys.argv[1]
 
