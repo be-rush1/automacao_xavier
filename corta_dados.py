@@ -13,7 +13,7 @@ data.rio.set_spatial_dims(x_dim="longitude", y_dim="latitude", inplace=True)
 data.rio.write_crs("EPSG:4326", inplace=True)
 data = data.drop_vars("time_bnds", errors="ignore")
 
-sudeste = geopandas.read_file("BR_regiao_sudeste_2022.shp")
+sudeste = geopandas.read_file("BR_região_sudeste_2022.shp")
 
 # Reprojeta shapefile se CRS diferente
 if sudeste.crs != data.rio.crs:
