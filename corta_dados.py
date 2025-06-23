@@ -4,44 +4,36 @@ import geopandas
 import sys
 import os
 from shapely.geometry import mapping
-os.system("ls")
-# Caminho para o arquivo NetCDF (passado via linha de comando)
-path = sys.argv[1]
 
-# Abre o dataset NetCDF
+# Argumentos: 1 = arquivo NetCDF, 2 = shapefile
+path = sys.argv[1]
+shapefile = sys.argv[2]
+
+# Carrega os dados climáticos
 data = xr.open_dataset(path)
 
-# Define os eixos espaciais para o rioxarray
+# Define as dimensões espaciais e sistema de referência
 data.rio.set_spatial_dims(x_dim="latitude", y_dim="longitude", inplace=True)
+data.rio.write_crs("epsg:4326", inplace=True)
 
-# Define o CRS do NetCDF (caso ainda não tenha)
-data.rio.write_crs("EPSG:4326", inplace=True)
-
-# Remove a variável time_bnds se existir
+# Remove a variável 'time_bnds' se existir
 data = data.drop_vars("time_bnds", errors="ignore")
 
-# Lê o shapefile da região sudeste
-script_dir = os.path.dirname(os.path.abspath(__file__))
-shapefile_path = os.path.join(script_dir, "BR_regiao_sudeste_2022.shp")
-sudeste = geopandas.read_file(shapefile_path)
+# Lê o shapefile passado como argumento
+sudeste = geopandas.read_file(shapefile)
 
-
-# Verifica e define CRS do shapefile, se necessário
+# Garante que o shapefile tenha um CRS definido
 if sudeste.crs is None:
-    sudeste.set_crs("EPSG:4326", inplace=True)
+    sudeste.set_crs("epsg:4326", inplace=True)
 
-# Reprojeta o shapefile para coincidir com o CRS do NetCDF
+# Converte o CRS do shapefile para o mesmo do dataset
 sudeste = sudeste.to_crs(data.rio.crs)
 
-# Faz o recorte dos dados com base no shapefile
+# Recorta os dados
 clipped = data.rio.clip(sudeste.geometry.apply(mapping), sudeste.crs, drop=True)
 
-# Verifica se o recorte resultou em dados vazios
-if clipped.time.size == 0:
-    raise ValueError(f"O recorte do arquivo {path} resultou em um dataset vazio.")
-
-# Salva o recorte em um novo arquivo NetCDF
+# Salva o arquivo recortado
 saida = "dados_cortados_" + os.path.basename(path)
 clipped.to_netcdf(saida)
 
-print(f"Dados de {path} cortados com sucesso!")
+print("Dados de " + path + " cortados com sucesso!")
