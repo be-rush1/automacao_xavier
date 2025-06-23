@@ -1,3 +1,5 @@
+
+def exists = fileExists ''
 pipeline {
     agent any
     stages {
@@ -10,6 +12,7 @@ pipeline {
                     ./venv/bin/pip install gdown
                     ./venv/bin/pip install rioxarray
                 fi
+                ./venv/bin/pip list
                 '''
             }
         }
