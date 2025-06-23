@@ -21,7 +21,7 @@ data.rio.write_crs("EPSG:4326", inplace=True)
 data = data.drop_vars("time_bnds", errors="ignore")
 
 # Lê o shapefile da região sudeste
-sudeste = geopandas.read_file("BR_região_sudeste_2022.shp")
+sudeste = geopandas.read_file("./BR_região_sudeste_2022.shp")
 
 # Verifica e define CRS do shapefile, se necessário
 if sudeste.crs is None:
