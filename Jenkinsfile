@@ -1,5 +1,3 @@
-
-def exists = fileExists ''
 pipeline {
     agent any
     stages {
