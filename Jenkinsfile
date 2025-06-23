@@ -35,6 +35,7 @@ pipeline {
        stage('Faz Média Mensal dos Dados'){
            steps{
                sh '''
+
                   for x in `ls dados_extraidos | grep .nc`; do
                      touch media_$x
                      cdo monmean dados_extraidos/$x media_$x
@@ -45,6 +46,7 @@ pipeline {
        stage('Corta Dados'){
            steps{
                sh ''' 
+                    . ./venv/bin/activate
                     for x in `ls | grep media`; do
                          python3 corta_dados.py $x
                     done
@@ -54,7 +56,7 @@ pipeline {
        stage('Calcula Anomalia, Normaliza e Remove tendência'){
             steps{
                 sh '''
-
+                    . ./venv/bin/activate
                     python3 novo.py
 
                 '''
