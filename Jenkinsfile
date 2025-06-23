@@ -50,7 +50,7 @@ pipeline {
                   '''
            }
        }
-       stage('Calcula Anomalia, Normaliza e Remove tendência')
+       stage('Calcula Anomalia, Normaliza e Remove tendência'){
             steps{
                 sh '''
 
