@@ -28,8 +28,8 @@ pipeline {
         stage('Deszipa arquivo'){
             steps{
                 sh '''
-                   unzip -o pr_Tmax_Tmin_NetCDF_Files.zip 'pr_*' -d dados_extraidos/
-                   rm pr_Tmax_Tmin_NetCDF_Files.zip
+                   #unzip -o pr_Tmax_Tmin_NetCDF_Files.zip 'pr_*' -d dados_extraidos/
+                   #rm pr_Tmax_Tmin_NetCDF_Files.zip
                    '''
             }
         }
