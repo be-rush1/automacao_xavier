@@ -21,8 +21,8 @@ pipeline {
             steps {
                 // Ativar o ambiente virtual e rodar o script Python que usa o gdown
                 sh '''
-                   . ./venv/bin/activate
-                   python3 baixa_xavier.py
+                  # . ./venv/bin/activate
+                  # python3 baixa_xavier.py
 
                    '''
             }
@@ -30,8 +30,8 @@ pipeline {
         stage('Deszipa arquivo'){
             steps{
                 sh '''
-                   unzip -o pr_Tmax_Tmin_NetCDF_Files.zip 'pr_*' -d dados_extraidos/
-                   rm pr_Tmax_Tmin_NetCDF_Files.zip
+                  # unzip -o pr_Tmax_Tmin_NetCDF_Files.zip 'pr_*' -d dados_extraidos/
+                  # rm pr_Tmax_Tmin_NetCDF_Files.zip
                    '''
             }
         }
@@ -39,10 +39,10 @@ pipeline {
            steps{
                sh '''
 
-                  for x in `ls dados_extraidos | grep .nc`; do
-                     touch media_$x
-                     cdo monmean dados_extraidos/$x media_$x
-                  done
+                 # for x in `ls dados_extraidos | grep .nc`; do
+                 #    touch media_$x
+                 #    cdo monmean dados_extraidos/$x media_$x
+                 # done
                   '''
            }
        }
@@ -59,8 +59,8 @@ pipeline {
        stage('Calcula Anomalia, Normaliza e Remove tendência'){
             steps{
                 sh '''
-                    #. ./venv/bin/activate
-                    #python3 novo.py
+                    . ./venv/bin/activate
+                    python3 novo.py
 
                 '''
             }
