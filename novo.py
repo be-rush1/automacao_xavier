@@ -1,9 +1,6 @@
 import numpy as np
 import xarray as xr
-import geopandas as gpd
-import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
-import cartopy.feature as cfeature
+
 
 # Abrir os arquivos NetCDF
 arquivos = [
