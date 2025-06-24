@@ -14,8 +14,8 @@ caminhos_detrended = [
 ]
 
 # Remover tendência com precisão de ponto flutuante
-for entrada, saida in zip(caminhos_originais, caminhos_detrended):
-    os.system(f"cdo -b F64 detrend {entrada} {saida}")
+#for entrada, saida in zip(caminhos_originais, caminhos_detrended):
+#    os.system(f"cdo -b F64 detrend {entrada} {saida}")
 
 # Abrir os arquivos detrended (sem dask)
 ds = xr.open_mfdataset(caminhos_detrended, combine='by_coords', chunks={})
