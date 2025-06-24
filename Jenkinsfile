@@ -12,6 +12,7 @@ pipeline {
                 ./venv/bin/pip install rioxarray
                 ./venv/bin/pip install geopandas
                 ./venv/bin/pip install netcdf4
+                ./venv/bin/pip install dask
                 '''
             }
         }
