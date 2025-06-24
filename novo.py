@@ -47,10 +47,4 @@ anomalia_norm_combinada = xr.concat(
 anomalia_norm_combinada.to_netcdf("anomalias_normalizadas_1961_2024.nc")
 print("Arquivo salvo: anomalias_normalizadas_1961_2024.nc")
 
-# Selecionar a anomalia de 2020 (média anual)
-anomalia_norm_2020 = anomalia_norm_combinada.sel(time=slice("20200101", "20201231")).mean(dim='time')
-
-# Salvar a anomalia normalizada de 2020
-anomalia_norm_2020.to_netcdf("/Users/elizabetenunes/Desktop/anomalia_normalizada_2020.nc")
-print("Arquivo salvo: anomalia_normalizada_2020.nc")
 
