@@ -49,10 +49,10 @@ pipeline {
        stage('Corta Dados'){
            steps{
                sh ''' 
-                    . ./venv/bin/activate
-                    for x in `ls | grep media`; do
-                         python3 corta_dados.py $x
-                    done
+                  #  . ./venv/bin/activate
+                  #  for x in `ls | grep media`; do
+                  #       python3 corta_dados.py $x
+                  #  done
                   '''
            }
        }
